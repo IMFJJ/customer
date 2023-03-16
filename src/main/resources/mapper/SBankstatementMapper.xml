@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.customer.mapper.SBankstatementMapper">
+    <select id="selectBankstatement" resultType="com.example.customer.entity.SBankstatement">
+        SELECT id,amount,name,create_time createTime
+        FROM s_bankstatement
+        WHERE
+        1=1
+        <if test="name!=null and name!=''">
+            and name=#{name}
+        </if>
+        limit #{pageNum},#{size}
+    </select>
+
+    <select id="selectTotalNum" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM s_bankstatement
+        WHERE
+        1=1
+        <if test="name!=null and name!=''">
+            and name=#{name}
+        </if>
+    </select>
+</mapper>

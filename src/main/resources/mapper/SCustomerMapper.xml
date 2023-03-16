@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.customer.mapper.SCustomerMapper">
+
+    <select id="selectCustomer" resultType="com.example.customer.entity.SCustomer">
+        SELECT id,name
+            FROM s_customer
+        WHERE
+            1=1
+        <if test="name!=null and name!=''">
+            and MATCH (`name`) AGAINST (#{name} IN BOOLEAN MODE)
+        </if>
+        limit #{pageNum},#{size}
+    </select>
+
+    <select id="selectTotalNum" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM s_customer
+        WHERE
+        1=1
+        <if test="name!=null and name!=''">
+            and MATCH (`name`) AGAINST (#{name} IN BOOLEAN MODE)
+        </if>
+    </select>
+
+    <select id="selectCustomerRel" resultType="com.example.customer.entity.SCustomer">
+        SELECT
+            cr.child_id id,
+            cr.child_name name
+        FROM
+            s_customer_rel cr
+        WHERE
+            cr.parent_id = #{parentId}
+        GROUP BY cr.child_id,cr.child_name
+        limit #{pageNum},#{size}
+    </select>
+
+    <select id="selectRelTotalNum" resultType="java.lang.Integer">
+        SELECT
+            count( DISTINCT cr.child_id)
+        FROM
+            s_customer_rel cr
+        WHERE
+            cr.parent_id = #{parentId}
+
+    </select>
+
+
+</mapper>
